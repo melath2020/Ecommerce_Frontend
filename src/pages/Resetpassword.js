@@ -8,7 +8,7 @@ const Resetpassword = () => {
     <Meta title="Reset Password" />
     <BreadCrumb title="Reset Passord" />
 
-    <div className="login-wrapper  home-rapper-2">
+    <div className="login-wrapper  home-wrapper-2">
           <div className="container-xxl">
           <div className="row">
                 <div className="col-12">

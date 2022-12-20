@@ -9,7 +9,7 @@ const Login = () => {
        <Meta title="Login" />
         <BreadCrumb title="Login" />
 
-        <div className="login-wrapper py-5 home-rapper-2">
+        <div className="login-wrapper py-5 home-wrapper-2">
            <div className="container-xxl">
 
            <div className="row">
