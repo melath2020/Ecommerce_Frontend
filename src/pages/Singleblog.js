@@ -20,7 +20,7 @@ const Singleblog = () => {
                                   <HiOutlineArrowLeft className="fs-4" /> Go back to Blogs
                               </Link>
                               <h3 className="title">A Beautiful Sunday Morning Renaissance</h3>
-                              <img src="images/blog-1.jpg" className="img-fluid w-100 my-4" alt="blog" />
+                              <img src="images/ blog-1.jpg" className="img-fluid w-100 my-4" alt="blog" />
                               <p>
                                   You’re only as good as your last collection, which is an
                                   enormous pressure. I think there is something about luxury –
