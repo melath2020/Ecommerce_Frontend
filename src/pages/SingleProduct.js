@@ -12,6 +12,15 @@ const SingleProduct = () => {
     const props = { width: 400, height: 500, zoomWidth: 600, img: "https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?cs=srgb&dl=pexels-fernando-arcos-190819.jpg&fm=jpg" };
 
     const [orderedProduct, setorderedProduct] = useState(true);
+    const copyToClipboard = (text) => {
+        console.log('text', text)
+        var textField = document.createElement('textarea')
+        textField.innerText = text
+        document.body.appendChild(textField)
+        textField.select()
+        document.execCommand('copy')
+        textField.remove()
+      }
     return (
         <>
             <Meta title="Product Names" />
@@ -71,7 +80,7 @@ const SingleProduct = () => {
                                     </div>
                                     <a className='review-btn' href="#review">Write a Review</a>
                                 </div>
-                                <div className="border-bottom py-3">
+                                <div className=" py-3">
                                     <div className='d-flex gap-10 align-items-center my-2'>
                                         <h3 className="product-heading">
                                             Type :
@@ -144,14 +153,23 @@ const SingleProduct = () => {
                                         </div>
                                     </div>
 
-                                    <div className='d-flex gap-10 align-items-center my-2'>
+                                    <div className='d-flex gap-10 flex-column  my-3'>
                                         <h3 className="product-heading">
-                                           Shipping & Returns
+                                            Shipping & Returns
                                         </h3><p className="product-data">
-                    Free shipping and returns available on all orders! <br /> We
-                    ship all US domestic orders within
-                    <b>5-10 business days!</b>
-                  </p>
+                                            Free shipping and returns available on all orders! <br /> We
+                                            ship all US domestic orders within
+                                            <b> 5-10 business days!</b>
+                                        </p>
+
+                                    </div>
+
+                                    <div className='d-flex gap-10 align-items-center my-3'>
+                                        <h3 className="product-heading">
+                                            Product Link
+                                        </h3><a href="javascript:void(0);" onClick={()=>copyToClipboard( "https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?cs=srgb&dl=pexels-fernando-arcos-190819.jpg&fm=jpg")}>
+                                        Copy Product Link
+                                        </a>
 
                                     </div>
                                 </div>
