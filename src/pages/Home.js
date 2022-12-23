@@ -6,9 +6,11 @@ import ProductCard from '../components/ProductCard';
 import SpecialProduct from '../components/SpecialProduct';
 
 
+
 const Home = () => {
   return (
     <>
+    
       <section className='home-wrapper-1 py-5'>
         <div className='container-xxl'>
           <div className="row">
