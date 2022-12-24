@@ -4,6 +4,7 @@ import Meta from "../components/Meta";
 import watch from "../images/watch.jpg";
 import { AiFillDelete } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import Container from "../components/Container";
 
 
 const Cart = () => {
@@ -11,8 +12,7 @@ const Cart = () => {
     <>
       <Meta title={"Cart"} />
       <BreadCrumb title="Cart" />
-      <section className="cart-wrapper home-wrapper-2 py-5">
-        <div className="container-xxl">
+      <Container class1="cart-wrapper home-wrapper-2 py-5">
         <div className="row">
           <div className="col-12">
             <div className="cart-header py-3 d-flex justify-content-between align-items-center">
@@ -69,10 +69,9 @@ const Cart = () => {
               </div>
             </div>
           </div>
-          </div>
         </div>
+      </Container>
 
-      </section>
     </>
   );
 };

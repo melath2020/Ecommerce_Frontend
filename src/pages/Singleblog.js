@@ -4,6 +4,7 @@ import BreadCrumb from "../components/BreadCrumb";
 import { HiOutlineArrowLeft } from "react-icons/hi";
 import Meta from "../components/Meta";
 import blog from "../images/blog-1.jpg";
+import Container from '../components/Container';
 
 const Singleblog = () => {
   return (
@@ -11,9 +12,8 @@ const Singleblog = () => {
     <Meta title="Dynamic Blog Name" />
     <BreadCrumb title="Dynamic Blog Name" />
 
-          <div className="blog-wrapper home-wrapper-2 py-5">
-              <div className="container-xxl">
-                  <div className="row">
+<Container class1="blog-wrapper home-wrapper-2 py-5">
+<div className="row">
                       <div className="col-12">
                           <div className="single-blog-card">
                               <Link to="/blogs" className="d-flex align-items-center gap-10">
@@ -34,9 +34,8 @@ const Singleblog = () => {
                           </div>
                       </div>
                   </div>
-
-              </div>
-          </div>
+</Container>
+          
       
    
    </>
