@@ -9,18 +9,28 @@ import { services } from "../utils/Data";
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllBlogs } from '../features/blogs/blogSlice';
 import moment from 'moment';
+import { getAllProducts } from '../features/products/productSlice';
+import ProductCardPopu from '../components/ProductCardPopu';
 
 
 const Home = () => {
+  const productState=useSelector((state)=>state?.product.product)
   const blogState=useSelector((state)=> state?.blog?.blog)
-  console.log(blogState)
+  console.log(productState)
   const dispatch=useDispatch()
   useEffect(()=>{
       getBlogs()
+      getProducts()
   },[])
   const getBlogs=()=>{
       dispatch(getAllBlogs())
   }
+
+  const getProducts=()=>{
+    dispatch(getAllProducts())
+
+  }
+
   return (
     <>
       <Container class1="home-wrapper-1 py-5">
@@ -209,10 +219,21 @@ const Home = () => {
               Featured Collection
             </h3>
           </div>
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
+          {productState && productState?.map((item,index)=>{
+            if(item.tags==="featured"){
+              return(  <SpecialProduct 
+                key={index} 
+                title={item?.title} 
+                brand={item?.brand} 
+                totalrating={item?.totalrating.toString()} 
+                price={item?.price} 
+                sold={item?.sold}
+                quantity={item?.quantity}
+                />)
+            }
+           
+          })}
+        
 
         </div>
       </Container>
@@ -286,10 +307,27 @@ const Home = () => {
 
       <Container class1="special-wrapper py-5 home-wrapper-2">
         <div className="row">
-          <SpecialProduct />
-          <SpecialProduct />
-          <SpecialProduct />
-          <SpecialProduct />
+        <div className="col-12">
+            <h3 className="section-heading">
+              Special Product
+            </h3>
+          </div>
+          {productState && productState?.map((item,index)=>{
+            if(item.tags==="special"){
+              return(  <SpecialProduct 
+                key={index} 
+                title={item?.title} 
+                brand={item?.brand} 
+                totalrating={item?.totalrating.toString()} 
+                price={item?.price} 
+                sold={item?.sold}
+                quantity={item?.quantity}
+                />)
+            }
+           
+          })}
+        
+         
 
         </div>
       </Container>
@@ -305,12 +343,25 @@ const Home = () => {
 
         </div>
         <div className="row">
+        {productState && productState?.map((item,index)=>{
+            if(item.tags==="popular"){
+              return(  <ProductCardPopu
+                key={index} 
+                id={item?._id}
+                title={item?.title} 
+                brand={item?.brand} 
+                totalrating={item?.totalrating.toString()} 
+                price={item?.price} 
+                sold={item?.sold}
+                quantity={item?.quantity}
+                description={item?.description}
+                images={item?.images}
+                
+                />)
+            }
+           
+          })}
 
-
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
         </div>
       </Container>
 

@@ -2,9 +2,10 @@ import React from 'react';
 import ReactStars from "react-rating-stars-component";
 import { Link } from 'react-router-dom';
 
-function SpecialProduct() {
+function SpecialProduct(props) {
+  const {title,brand,totalrating,price,sold,quantity}=props
   return (
-    <div className='col-6 mb-3'>
+    <div className='col-4 mb-3'>
       <div className="special-product-card ">
         <div className='d-flex justify-content-between'>
           <div>
@@ -12,12 +13,12 @@ function SpecialProduct() {
           </div>
 
           <div className='special-product-content'>
-            <h5 className='brand'>Havels</h5>
-            <h6 className='title'>Samsung Galexy Note10 Mobile  phone sim</h6>
+            <h5 className='brand'>{brand}</h5>
+            <h6 className='title'>{title}</h6>
             <ReactStars
               edit={false}
               count={5}
-              value={4}
+              value={totalrating}
               size={24}
               isHalf={true}
               emptyIcon={<i className="far fa-star"></i>}
@@ -27,9 +28,9 @@ function SpecialProduct() {
             />
             <p className="price">
               <span className="red-p">
-                $100
+                ${price}
               </span> &nbsp;
-              <strike>$200</strike>
+              {/* <strike>$200</strike> */}
             </p>
             <div className='discount-till d-flex align-items-center gap-10'>
               <p className='mb-0'><b>5 Days</b></p>
@@ -42,9 +43,9 @@ function SpecialProduct() {
 
             </div>
             <div className="prod-count my-3">
-              <p>Products : 5</p>
+              <p>Products : {quantity}</p>
               <div className="progress">
-                <div className="progress-bar" role="progressbar" style={{ "width": "25%" }} aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                <div className="progress-bar" role="progressbar" style={{ "width":quantity/quantity+sold *100 + "%" }} aria-valuenow={quantity/quantity+sold *100} aria-valuemin={quantity} aria-valuemax={sold+quantity}></div>
               </div>
             </div>
 
