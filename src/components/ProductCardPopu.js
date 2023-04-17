@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactStars from "react-rating-stars-component";
 import { useDispatch } from 'react-redux';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import wish from "../images/wish.svg";
 import watch2 from "../images/watch-1.avif";
 import { addToWishlist } from '../features/products/productSlice';
@@ -12,6 +12,7 @@ import prodcompare from "../images/prodcompare.svg";
 const ProductCardPopu = (props) => {
     const dispatch=useDispatch()
     let location = useLocation();
+    const navigate=useNavigate()
     const addToWish=(prodId)=>{
         alert(prodId)
         dispatch(addToWishlist(prodId))
@@ -19,13 +20,7 @@ const ProductCardPopu = (props) => {
     const {index,title,brand,totalrating,price,sold,quantity,description,images,id}=props
   return (
     <div key={index} className="col-3">
-<Link 
-//     to={`${location.pathname == "/"
-//   ? "/product/:id"
-//   : location.pathname == "/product/:id"
-//     ? "/product/:id"
-//     : ":id"
-// }`} 
+<div
 className="product-card position-relative">
     <div className="wishlist-icon position-absolute">
         <button className="border-0 bg-transparent" onClick={(e)=>{addToWish(id)}}><img src={wish} alt="wishlist" /></button>
@@ -70,7 +65,7 @@ className="product-card position-relative">
 
 
         <div className="d-flex flex-column">
-            <button className="border-0 bg-transparent"><img src={view} alt="view" /></button>
+            <button className="border-0 bg-transparent"><img onClick={()=>navigate("/product/"+id)} src={view}  alt="view" /></button>
         </div>
 
         <div className="d-flex flex-column">
@@ -79,7 +74,7 @@ className="product-card position-relative">
 
 
     </div>
-</Link>
+</div>
 </div >
   )
 }

@@ -13,6 +13,7 @@ import { getAllProducts } from '../features/products/productSlice';
 import ProductCardPopu from '../components/ProductCardPopu';
 
 
+
 const Home = () => {
   const productState=useSelector((state)=>state?.product.product)
   const blogState=useSelector((state)=> state?.blog?.blog)
@@ -221,14 +222,18 @@ const Home = () => {
           </div>
           {productState && productState?.map((item,index)=>{
             if(item.tags==="featured"){
-              return(  <SpecialProduct 
+              return(  <ProductCardPopu
                 key={index} 
+                id={item?._id}
                 title={item?.title} 
                 brand={item?.brand} 
                 totalrating={item?.totalrating.toString()} 
                 price={item?.price} 
                 sold={item?.sold}
                 quantity={item?.quantity}
+                description={item?.description}
+                images={item?.images}
+                
                 />)
             }
            
@@ -316,6 +321,7 @@ const Home = () => {
             if(item.tags==="special"){
               return(  <SpecialProduct 
                 key={index} 
+                id={item?._id}
                 title={item?.title} 
                 brand={item?.brand} 
                 totalrating={item?.totalrating.toString()} 

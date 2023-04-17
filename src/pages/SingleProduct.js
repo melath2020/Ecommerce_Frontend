@@ -8,10 +8,21 @@ import Color from '../components/Color';
 import { TbGitCompare } from 'react-icons/tb';
 import { AiOutlineHeart } from 'react-icons/ai';
 import Container from '../components/Container';
+import { useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { getAProduct } from '../features/products/productSlice';
 
 const SingleProduct = () => {
-    const props = { width: 400, height: 500, zoomWidth: 600, img: "https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?cs=srgb&dl=pexels-fernando-arcos-190819.jpg&fm=jpg" };
-
+    
+    const location=useLocation()
+    const getProductId=location.pathname.split("/")[2]
+    const dispatch=useDispatch()
+    const productState=useSelector(state=>state.product?.singleproduct)
+    useEffect(()=>{
+        dispatch(getAProduct(getProductId))
+    },[])
+    const props = { width: 400, height: 500, zoomWidth: 600, img: productState?.images[0]?.url ? productState?.images[0]?.url : "https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?cs=srgb&dl=pexels-fernando-arcos-190819.jpg&fm=jpg"};
     const [orderedProduct, setorderedProduct] = useState(true);
     const copyToClipboard = (text) => {
         console.log('text', text)
@@ -36,18 +47,16 @@ const SingleProduct = () => {
                             </div>
                         </div>
                         <div className="other-product-images d-flex flex-wrap gap-15">
-                            <div>
-                                <img src="https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?cs=srgb&dl=pexels-fernando-arcos-190819.jpg&fm=jpg" className='img-fluid' alt="" />
-                            </div>
-                            <div>
-                                <img src="https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?cs=srgb&dl=pexels-fernando-arcos-190819.jpg&fm=jpg" className='img-fluid' alt="" />
-                            </div>
-                            <div>
-                                <img src="https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?cs=srgb&dl=pexels-fernando-arcos-190819.jpg&fm=jpg" className='img-fluid' alt="" />
-                            </div>
-                            <div>
-                                <img src="https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?cs=srgb&dl=pexels-fernando-arcos-190819.jpg&fm=jpg" className='img-fluid' alt="" />
-                            </div>
+                            {productState?.images.map((item,index)=>{
+                                return(
+                                    <div key={index}>
+                                    <img src={item?.url} className='img-fluid' alt="" />
+                                    </div>
+                                )
+                            })}
+                           
+                           
+                        
 
                         </div>
                     </div>
@@ -55,20 +64,20 @@ const SingleProduct = () => {
                         <div className="main-product-details">
                             <div className='border-bottom'>
                                 <h3 className='title'>
-                                    Kids Headphones Bulk 10pack Multicoloured for Students
+                                  {productState?.title}
                                 </h3>
 
                             </div>
                             <div className="border-bottom py-3">
                                 <p className="price">
-                                    $ 100
+                                    $  {productState?.price}
                                 </p>
                                 <div className='d-flex align-items-center gap-10'>
 
                                     <ReactStars
                                         edit={false}
                                         count={5}
-                                        value={4}
+                                        value={productState?.totalrating}
                                         size={24}
                                         isHalf={true}
                                         emptyIcon={<i className="far fa-star"></i>}
@@ -90,19 +99,19 @@ const SingleProduct = () => {
                                 <div className='d-flex gap-10 align-items-center my-2'>
                                     <h3 className="product-heading">
                                         Brand :
-                                    </h3><p className='product-data'>Haves</p>
+                                    </h3><p className='product-data'> {productState?.brand}</p>
 
                                 </div>
                                 <div className='d-flex gap-10 align-items-center my-2'>
                                     <h3 className="product-heading">
                                         Category :
-                                    </h3><p className='product-data'>Watch</p>
+                                    </h3><p className='product-data'>{productState?.category}</p>
 
                                 </div>
                                 <div className='d-flex gap-10 align-items-center my-2'>
                                     <h3 className="product-heading">
                                         Tags :
-                                    </h3><p className='product-data'>Watch</p>
+                                    </h3><p className='product-data'> {productState?.tags}</p>
 
                                 </div>
 
@@ -167,7 +176,7 @@ const SingleProduct = () => {
                                 <div className='d-flex gap-10 align-items-center my-3'>
                                     <h3 className="product-heading">
                                         Product Link
-                                    </h3><a href="javascript:void(0);" onClick={() => copyToClipboard("https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?cs=srgb&dl=pexels-fernando-arcos-190819.jpg&fm=jpg")}>
+                                    </h3><a href="javascript:void(0);" onClick={() => copyToClipboard(window.location.href)}>
                                         Copy Product Link
                                     </a>
 
@@ -188,8 +197,8 @@ const SingleProduct = () => {
                         </h4>
                         <div className='bg-white p-3'>
 
-                            <p>
-                                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eos, consequuntur pariatur earum veniam maiores deserunt, ab totam dolore nisi eum, debitis numquam adipisci. Iure sit incidunt necessitatibus ullam. Numquam, incidunt.
+                            <p dangerouslySetInnerHTML={{__html:productState?.description}}>
+                           
                             </p>
                         </div>
                     </div>
