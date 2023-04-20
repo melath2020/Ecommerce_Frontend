@@ -12,9 +12,12 @@ import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getAProduct } from '../features/products/productSlice';
+import { toast } from 'react-toastify';
+import { addProdToCart } from '../features/user/userSlice';
 
 const SingleProduct = () => {
-    
+    const [color,setColor]=useState(null)
+    const [quantity,setQuantity]=useState(1)
     const location=useLocation()
     const getProductId=location.pathname.split("/")[2]
     const dispatch=useDispatch()
@@ -24,6 +27,14 @@ const SingleProduct = () => {
     },[])
     const props = { width: 400, height: 500, zoomWidth: 600, img: productState?.images[0]?.url ? productState?.images[0]?.url : "https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?cs=srgb&dl=pexels-fernando-arcos-190819.jpg&fm=jpg"};
     const [orderedProduct, setorderedProduct] = useState(true);
+    const uploadCart=()=>{
+        if(color===null){
+            toast.error("Please Choose Color")
+            return false
+        }else{
+            dispatch(addProdToCart({productId:productState?._id,quantity,color,price:productState?.price}))
+        }
+    }
     const copyToClipboard = (text) => {
         console.log('text', text)
         var textField = document.createElement('textarea')
@@ -137,7 +148,7 @@ const SingleProduct = () => {
                                 <div className='d-flex gap-10 flex-column  mb-3 mt-2'>
                                     <h3 className="product-heading">
                                         Color :
-                                    </h3><Color />
+                                    </h3><Color setColor={setColor} colorData={productState?.color}/>
 
                                 </div>
 
@@ -145,10 +156,10 @@ const SingleProduct = () => {
                                     <h3 className="product-heading">
                                         Quantity :</h3>
                                     <div className=''>
-                                        <input type="number" name="" min={1} max={10} step={{ width: "70px" }} className="form-control" id="" />
+                                        <input type="number" name="" min={1} max={10} step={{ width: "70px" }} className="form-control" id=""  onChange={(e)=>{setQuantity(e.target.value)}} value={quantity}/>
                                     </div>
                                     <div className='d-flex align-items-center gap-30 ms-5'>
-                                        <button className='button border-0'>Add to Cart</button>
+                                        <button className='button border-0' onClick={()=>{uploadCart()}}>Add to Cart</button>
                                         <button className='button signup'>Buy it Now</button>
                                     </div>
 
