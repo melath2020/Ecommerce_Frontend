@@ -6,15 +6,33 @@ import { AiFillDelete } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import Container from "../components/Container";
 import { useDispatch, useSelector } from "react-redux";
-import { getUserCart } from "../features/user/userSlice";
+import { deleteCartProduct, getUserCart, updateCartProduct } from "../features/user/userSlice";
+import { useState } from "react";
 
 
 const Cart = () => {
   const dispatch=useDispatch()
+  const [ProductUpdateDetail,setProductUpdateDetail]=useState(null)
   const userCartState=useSelector(state=>state.auth.cartProducts)
   useEffect(()=>{
     dispatch(getUserCart())
   },[])
+  useEffect(()=>{
+    if(ProductUpdateDetail!==null){
+      dispatch(updateCartProduct({cartItemId:ProductUpdateDetail?.cartItemId,quantity:ProductUpdateDetail?.quantity}))
+    setTimeout(() => {
+      dispatch(getUserCart())
+    }, 200);
+    }
+  },[ProductUpdateDetail])
+  const deleteACartProduct=(id)=>{
+    dispatch(deleteCartProduct(id))
+    setTimeout(() => {
+      dispatch(getUserCart())
+    }, 200);
+  }
+
+  
   console.log(userCartState)
   return (
     <>
@@ -57,11 +75,12 @@ const Cart = () => {
                     min={1}
                     max={10}
                     id=""
-                    value={item?.quantity}
+                    value={ProductUpdateDetail?.quantity ? ProductUpdateDetail?.quantity:item?.quantity}
+                    onChange={(e)=>setProductUpdateDetail({cartItemId:item?._id,quantity:e.target.value})}
                   />
                 </div>
                 <div>
-                  <AiFillDelete className="text-danger " />
+                  <AiFillDelete className="text-danger " onClick={()=>{deleteACartProduct(item?._id)}} />
                 </div>
               </div>
               <div className="cart-col-4">

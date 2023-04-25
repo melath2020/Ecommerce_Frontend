@@ -38,11 +38,28 @@ const getCart=async()=>{
 }
 
 
+const removeProductFromCart=async(cartItemId)=>{
+    const responce=await axios.delete(`${base_url}user/delete-product-cart/${cartItemId}`,config);
+    if(responce.data){
+        return responce.data
+    }
+}
+
+const updateProductFromCart=async(cartDetail)=>{
+    const responce=await axios.delete(`${base_url}user/update-product-cart/${cartDetail.cartItemId}/${cartDetail.quantity}`,config);
+    if(responce.data){
+        return responce.data
+    }
+}
+
+
 
 export const authService={
     register,
     login,
     getUserWishlist,
     addToCart,
-    getCart
+    getCart,
+    removeProductFromCart,
+    updateProductFromCart
 }
