@@ -8,6 +8,7 @@ import { useFormik } from "formik";
 import * as yup from 'yup'
 import axios from "axios";
 import {config} from '../utils/axiosConfig';
+import { createAnOrder } from "../features/user/userSlice";
 
 const shippingSchema = yup.object({
   firstName: yup.string().required("First Name is Required"),
@@ -29,6 +30,7 @@ const Checkout = () => {
   const cartState=useSelector(state=>state?.auth?.cartProducts)
   const [shippingInfo,setShippingInfo]=useState(null)
   const [paymentInfo,setPaymentInfo]=useState({razorpayPaymentId:"",razorpayOrderId:""})
+  const [cartProductsState,setCartProductState]=useState([])
   useEffect(()=>{
     let sum =0;
     for (let index = 0; index < cartState?.length; index++) {
@@ -37,6 +39,15 @@ const Checkout = () => {
       
     }
   },[cartState])
+
+  useEffect(()=>{
+    let items=[]
+    for (let index = 0; index < cartState?.length; index++) {
+     items.push({product:cartState[index].productId._id,quantity:cartState[index].quantity,color:cartState[index].color._id,price:cartState[index].price})
+     
+    }
+    setCartProductState(items)
+  },[])
 
   const loadScript=(src)=>{
     return new Promise((resolve)=>{
@@ -58,7 +69,7 @@ const Checkout = () => {
       alert("Razorpay SDK failed to load")
       return;
     }
-    const result=await axios.post("http://localhost:5000/api/user/order/checkout","",config)
+    const result=await axios.post("http://localhost:5000/api/user/order/checkout",{amount:totalAmount+5},config)
     if(!result){
       alert("Something went wrong")
       return;
@@ -87,6 +98,8 @@ const Checkout = () => {
                     razorpayPaymentId: response.razorpay_payment_id,
                     razorpayOrderId: response.razorpay_order_id,
                })
+               dispatch(createAnOrder({totalPrice:totalAmount,totalPriceAfterDiscount:totalAmount,orderItems:cartProductsState,paymentInfo,shippingInfo}))
+              
             },
             prefill: {
                 name: "Aswin",
@@ -121,7 +134,10 @@ const Checkout = () => {
     onSubmit: values => {
       alert(JSON.stringify(values))
       setShippingInfo(values)
-      checkOutHandler()
+     
+      setTimeout(() => {
+        checkOutHandler()
+      }, 300);
      
     },
   });

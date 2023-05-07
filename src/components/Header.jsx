@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 const Header = () => {
   const dispatch=useDispatch();
   const cartState=useSelector(state=>state?.auth?.cartProducts)
+  const authState=useSelector(state=>state.auth)
   const [totalAmount,setTotalAmount]=useState(null)
   useEffect(()=>{
     let sum =0
@@ -91,13 +92,17 @@ const Header = () => {
                 </div>
                 <div>
                   <Link
-                    to="/login"
+                    to={authState.user===null? "/login":""}
                     className="d-flex align-items-center gap-10 text-white"
                   >
                     <img src={user} alt="user" />
-                    <p className="mb-0">
-                      Log in <br /> My Account
+                   {
+                    authState.user===null? <p className="mb-0">
+                    Log in <br /> My Account
+                  </p>: <p className="mb-0">
+                      Welcome {authState?.user?.firstname}
                     </p>
+                   }
                   </Link>
                 </div>
                 <div>
