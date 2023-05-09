@@ -1,8 +1,16 @@
 import React from 'react'
 import Container from '../components/Container'
 import BreadCrumb from '../components/BreadCrumb'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { getOrders } from '../features/user/userSlice'
 
 const Orders = () => {
+  const dispatch=useDispatch()
+  const orderState=useSelector((state)=>state?.auth?.getorderedProduct?.orders)
+  useEffect(()=>{
+    dispatch(getOrders())
+  },[])
   return (
     <>
       <BreadCrumb title="My Orders" />
@@ -25,37 +33,66 @@ const Orders = () => {
             </div>
           </div>
           <div className="col-12 mt-3">
-            <div className="row">
-              <div className="col-3">
-                <p>Order Id </p>
-              </div>
-              <div className="col-3">
-                <p>Total Amount </p>
-              </div>
-              <div className="col-3">
-                <p>Total Amount After Discount </p>
-              </div>
-              <div className="col-3">
-                <p>Status </p>
-              </div>
-              <div className="col-12">
-              <div className="row bg-secondary p-3">
-              <div className="col-3">
-                <p>Order Id </p>
-              </div>
-              <div className="col-3">
-                <p>Total Amount </p>
-              </div>
-              <div className="col-3">
-                <p>Total Amount After Discount </p>
-              </div>
-              <div className="col-3">
-                <p>Status </p>
-              </div>
-            </div>
-              </div>
-            </div>
-          
+            {
+              orderState && orderState?.map((item,index)=>{
+                return (
+                  <div style={{backgroundColor:"#febd69"}} className="row pt-3 my-3" key={index}>
+                  <div className="col-3">
+                    <p>{item?._id}</p>
+                  </div>
+                  <div className="col-3">
+                    <p>{item?.totalPrice} </p>
+                  </div>
+                  <div className="col-3">
+                    <p>{item?.totalPriceAfterDiscount}</p>
+                    </div>
+                  <div className="col-3">
+                    <p>{item?.orderStatus}</p>
+                  </div>
+                  <div className="col-12">
+                    <div className="row  py-3" style={{backgroundColor:"#2b4663"}}>
+                      <div className="col-3">
+                        <h6 className='text-white'>Product Name </h6>
+                      </div>
+                      <div className="col-3">
+                        <h6 className='text-white'>Quantity</h6>
+                      </div>
+                      <div className="col-3">
+                        <h6 className='text-white'>Price </h6>
+                      </div>
+                      <div className="col-3">
+                        <h6 className='text-white'>Color </h6>
+                      </div>
+                      
+                    </div>
+                    {
+                        item?.orderItems?.map((i,index)=>{
+                            return(
+                              <div className="row  p-3" style={{backgroundColor:"#192e45"}} key={index}>
+                              <div className="col-3">
+                                <p className='text-white'>{i?.product?.title} </p>
+                              </div>
+                              <div className="col-3">
+                                <p className='text-white'>{i?.quantity} </p>
+                              </div>
+                              <div className="col-3">
+                                <p className='text-white'>{i?.price}  </p>
+                              </div>
+                              <div className="col-3">
+                              <ul className='colors ps-0'>
+                    <li style={{backgroundColor:i?.color?.title}}></li></ul>
+                              </div>
+                            </div>
+                            )
+                        })
+                      }
+                   
+                  </div>
+                  
+                </div>
+                )
+              })
+            }
           </div>
         </div>
       </Container>

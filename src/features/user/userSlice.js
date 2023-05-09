@@ -66,6 +66,14 @@ export const createAnOrder=createAsyncThunk("user/cart/create-order",async (orde
     }
 })
 
+export const getOrders=createAsyncThunk("user/order/get",async (thunkAPI)=>{
+    try{
+        return await authService.getUserOrders()
+    }catch(errors){
+        return thunkAPI.rejectWithValue(errors)
+    }
+})
+
 const getCustomerfromLocalStorage=localStorage.getItem('customer')? JSON.parse(localStorage.getItem('customer')):null;
 
 const initialState={
@@ -213,7 +221,7 @@ export const authSlice=createSlice({
             if(state.isError){
                 toast.error("Something Went Wrong!")
             }
-        })     .addCase(createAnOrder.pending,(state)=>{
+        }).addCase(createAnOrder.pending,(state)=>{
             state.isLoading=true;
            
         }).addCase(createAnOrder.fulfilled,(state,action)=>{
@@ -233,6 +241,22 @@ export const authSlice=createSlice({
             if(state.isError){
                 toast.error("Something Went Wrong!")
             }
+        }).addCase(getOrders.pending,(state)=>{
+            state.isLoading=true;
+           
+        }).addCase(getOrders.fulfilled,(state,action)=>{
+            state.isLoading=false;
+            state.isError=false;
+            state.isSuccess=true;
+            state.getorderedProduct=action.payload;
+           
+           
+        }).addCase(getOrders.rejected,(state,action)=>{
+            state.isLoading=false;
+            state.isError=true;
+            state.isSuccess=false;
+            state.message=action.error;
+           
         })
     }
 })
