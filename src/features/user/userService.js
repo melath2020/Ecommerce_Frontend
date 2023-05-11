@@ -68,6 +68,20 @@ const getUserOrders=async()=>{
 }
 
 
+const updateUser=async(data)=>{
+    const responce=await axios.put(`${base_url}user/edit-user`,data,config)
+    if(responce.data){
+        return responce.data
+    }
+}
+
+const forgotPassToken=async(data)=>{
+    const responce=await axios.post(`${base_url}user/forgot-password-token`,data)
+    if(responce.data){
+        return responce.data
+    }
+}
+
 export const authService={
     register,
     login,
@@ -77,5 +91,7 @@ export const authService={
     removeProductFromCart,
     updateProductFromCart,
     createOrder,
-    getUserOrders
+    getUserOrders,
+    updateUser,
+    forgotPassToken
 }
