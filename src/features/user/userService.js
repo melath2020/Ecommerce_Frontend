@@ -82,6 +82,14 @@ const forgotPassToken=async(data)=>{
     }
 }
 
+const resetPass=async(data)=>{
+    const responce=await axios.put(`${base_url}user/reset-password/${data.token}`,{password:data?.password})
+    if(responce.data){
+        return responce.data
+    }
+}
+
+
 export const authService={
     register,
     login,
@@ -93,5 +101,6 @@ export const authService={
     createOrder,
     getUserOrders,
     updateUser,
-    forgotPassToken
+    forgotPassToken,
+    resetPass
 }

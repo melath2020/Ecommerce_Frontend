@@ -11,9 +11,10 @@ import Container from '../components/Container';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { getAProduct } from '../features/products/productSlice';
+import { addRating, getAProduct, getAllProducts } from '../features/products/productSlice';
 import { toast } from 'react-toastify';
 import { addProdToCart, getUserCart } from '../features/user/userSlice';
+import ProductCardPopu from '../components/ProductCardPopu';
 
 const SingleProduct = () => {
     const [color,setColor]=useState(null)
@@ -25,10 +26,13 @@ const SingleProduct = () => {
     const dispatch=useDispatch()
     const productState=useSelector(state=>state.product?.singleproduct)
     const cartState=useSelector(state=>state?.auth?.cartProducts)
-    console.log(productState)
+    const productsState=useSelector((state)=>state?.product.product)
     useEffect(()=>{
         dispatch(getAProduct(getProductId))
         dispatch(getUserCart())
+        getProducts()
+        
+        
     },[])
     
     useEffect(()=>{
@@ -41,6 +45,13 @@ const SingleProduct = () => {
             
         }
     },[])
+
+   
+
+    const getProducts=()=>{
+        dispatch(getAllProducts())
+        
+      }
   
     const props = { width: 400, height: 500, zoomWidth: 600, img: productState?.images[0]?.url ? productState?.images[0]?.url : "https://images.pexels.com/photos/190819/pexels-photo-190819.jpeg?cs=srgb&dl=pexels-fernando-arcos-190819.jpg&fm=jpg"};
     const [orderedProduct, setorderedProduct] = useState(true);
@@ -63,10 +74,31 @@ const SingleProduct = () => {
         document.execCommand('copy')
         textField.remove()
     }
+
+
+    const [star,setStar]=useState(null)
+    const [comment,setComment]=useState(null)
+    const addRatingToProduct=()=>{
+        if(star===null){
+            toast.error("Please add star rating")
+            return false
+        }else if(comment===null){
+            toast.error("Please write review about the product")
+            return false
+        }else{
+            dispatch(addRating({star:star,comment:comment,prodId:getProductId}))
+            setTimeout(() => {
+                dispatch(getAProduct(getProductId))
+            }, 100);
+            
+        }
+        return false
+    }
+
     return (
         <>
             <Meta title="Product Names" />
-            <BreadCrumb title="Product Names" />
+            <BreadCrumb title={productState?.title} />
 
             <Container class1="main-product-wrapper py-5 home-wrapper-2">
                 <div className="row">
@@ -254,6 +286,9 @@ const SingleProduct = () => {
                                             value={4}
                                             size={24}
                                             isHalf={true}
+                                            onChange={(e)=>{
+                                                setStar(e)
+                                            }}
                                             emptyIcon={<i className="far fa-star"></i>}
                                             halfIcon={<i className="fa fa-star-half-alt"></i>}
                                             fullIcon={<i className="fa fa-star"></i>}
@@ -272,7 +307,7 @@ const SingleProduct = () => {
                             </div>
                             <div className="review-form py-4">
                                 <h4>Write a Review</h4>
-                                <form action="" className='d-flex flex-column gap-15'>
+                               
 
                                     <div>
 
@@ -282,6 +317,9 @@ const SingleProduct = () => {
                                             value={4}
                                             size={24}
                                             isHalf={true}
+                                            onChange={(e)=>{
+                                                setStar(e)
+                                            }}
                                             emptyIcon={<i className="far fa-star"></i>}
                                             halfIcon={<i className="fa fa-star-half-alt"></i>}
                                             fullIcon={<i className="fa fa-star"></i>}
@@ -290,21 +328,27 @@ const SingleProduct = () => {
                                     </div>
 
                                     <div>
-                                        <textarea name="" className='w-100 form-control' id="" cols="30" rows="4" placeholder='Comments'></textarea>
+                                        <textarea name="" className='w-100 form-control'
+                                         id="" cols="30" rows="4" placeholder='Comments'
+                                         onChange={(e)=>{
+                                            setComment(e.target.value)
+                                        }}></textarea>
                                     </div>
                                     <div className='d-flex justify-content-end'>
-                                        <button className='button border-0'>Submit Review</button>
+                                        <button className='button border-0 mt-2' onClick={addRatingToProduct}>Submit Review</button>
                                     </div>
-                                </form>
+                                
                             </div>
                             <div className="reviews mt-4">
-                                <div className="review ">
+                                {productState && productState?.ratings?.map((item,index)=>{
+                                    return(
+                                        <div key={index} className="review ">
                                     <div className='d-flex gap-10 align-items-center'>
-                                        <h6 className='mb-0'>Navdeep</h6>
+                                        <h6 className='mb-0'>{item?.title}</h6>
                                         <ReactStars
                                             edit={false}
                                             count={5}
-                                            value={4}
+                                            value={item?.star}
                                             size={24}
                                             isHalf={true}
                                             emptyIcon={<i className="far fa-star"></i>}
@@ -313,8 +357,10 @@ const SingleProduct = () => {
                                             activeColor="#ffd700"
                                         />
                                     </div>
-                                    <p className='mt-3'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magnam est quo esse placeat distinctio quas recusandae ut pariatur aliquam molestiae voluptatum adipisci odit cupiditate, totam error. Optio expedita veniam aperiam.</p>
+                                    <p className='mt-3'>{item?.comment}</p>
                                 </div>
+                                    )
+                                })}
                             </div>
                         </div>
                     </div>
@@ -333,11 +379,27 @@ const SingleProduct = () => {
                 </div>
                 <div className="row">
 
+                <div className="row">
+        {productsState && productsState?.map((item,index)=>{
+            if(item.tags==="popular"){
+              return(  <ProductCardPopu
+                key={index} 
+                id={item?._id}
+                title={item?.title} 
+                brand={item?.brand} 
+                totalrating={item?.totalrating.toString()} 
+                price={item?.price} 
+                sold={item?.sold}
+                quantity={item?.quantity}
+                description={item?.description}
+                images={item?.images}
+                
+                />)
+            }
+           
+          })}
 
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
+        </div>
                 </div>
             </Container>
 

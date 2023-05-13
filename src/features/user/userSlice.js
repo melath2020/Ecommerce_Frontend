@@ -90,6 +90,14 @@ export const forgotPasswordToken=createAsyncThunk("user/password/token",async (d
     }
 })
 
+export const resetPassword=createAsyncThunk("user/password/reset",async (data,thunkAPI)=>{
+    try{
+        return await authService.resetPass(data)
+    }catch(errors){
+        return thunkAPI.rejectWithValue(errors)
+    }
+})
+
 const getCustomerfromLocalStorage=localStorage.getItem('customer')? JSON.parse(localStorage.getItem('customer')):null;
 
 const initialState={
@@ -308,6 +316,27 @@ export const authSlice=createSlice({
            
            
         }).addCase(forgotPasswordToken.rejected,(state,action)=>{
+            state.isLoading=false;
+            state.isError=true;
+            state.isSuccess=false;
+            state.message=action.error;
+            if(state.isError){
+                toast.error("Something Went Wrong!")
+            }
+        }).addCase(resetPassword.pending,(state)=>{
+            state.isLoading=true;
+           
+        }).addCase(resetPassword.fulfilled,(state,action)=>{
+            state.isLoading=false;
+            state.isError=false;
+            state.isSuccess=true;
+            state.pass=action.payload;
+            if(state.isSuccess){
+                toast.success("Password Updated Successfully!")
+            }
+           
+           
+        }).addCase(resetPassword.rejected,(state,action)=>{
             state.isLoading=false;
             state.isError=true;
             state.isSuccess=false;
