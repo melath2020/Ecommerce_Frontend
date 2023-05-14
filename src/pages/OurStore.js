@@ -11,7 +11,35 @@ import { getAllProducts } from "../features/products/productSlice";
 const OurStore = () => {
   const [grid, setGrid] = useState(4);
   const productState = useSelector((state) => state?.product?.product);
-  console.log(productState);
+  const [brands, setBrands] = useState(null);
+  const [categories, setCategories] = useState(null);
+  const [tags, setTags] = useState(null);
+  const [minPrice, setminPrice] = useState(null);
+  const [maxPrice, setmaxPrice] = useState(null);
+
+  // Filter State
+  const [tag, setTag] = useState([]);
+  const [category, setCategory] = useState([]);
+  const [brand, setBrand] = useState([]);
+
+  useEffect(() => {
+    let newBrands = [];
+    let category = [];
+    let newtags = [];
+
+    for (let index = 0; index < productState?.length; index++) {
+      const element = productState?.[index];
+      newBrands.push(element.brand);
+      category.push(element.category);
+      newtags.push(element.tags);
+    }
+
+    setBrands(newBrands);
+    setCategories(category);
+    setTags(newtags);
+  }, [productState]);
+
+  console.log(brands);
   const dispatch = useDispatch();
   useEffect(() => {
     getProducts();
@@ -31,175 +59,85 @@ const OurStore = () => {
               <h3 className="filter-title">Shop By Categories</h3>
               <div>
                 <ul className="ps-0">
-                  <li>Watch</li>
+                  {categories &&
+                    [...new Set(categories)].map((item, index) => {
+                      return (
+                        <li key={index} onClick={() => setCategory(item)}>
+                          {item}
+                        </li>
+                      );
+                    })}
+                  {/* <li>Watch</li>
                   <li>Tv</li>
                   <li>Camera</li>
-                  <li>Laptop</li>
+                  <li>Laptop</li> */}
                 </ul>
               </div>
             </div>
+
             <div className="filter-card mb-3">
-              <h3 className="filter-title">Filter By</h3>
-              <div>
-                <h5 className="sub-title">Availiabiliy</h5>
+              
+                <h3 className="filter-title">Filter By</h3>
                 <div>
-                  <div className="form-check">
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      name=""
-                      id=""
-                    />
-                    <label className="form-check-label" htmlFor="">
-                      In Stock (1)
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      name=""
-                      id=""
-                    />
-                    <label className="form-check-label" htmlFor="">
-                      Out of Stock(0)
-                    </label>
+                  <h5 className="sub-title">Price</h5>
+                  <div className="d-flex align-items-center gap-10  ">
+                    <div className="form-floating ">
+                      <input
+                        type="number"
+                        className="form-control "
+                        id="floatingInput"
+                        placeholder="name@example.com"
+                        onChange={(e)=>setminPrice(e.target.value)}
+                      />
+                      <label htmlfor="floatingInput">From</label>
+                    </div>
+                    <div className="form-floating  ">
+                      <input
+                        type="number"
+                        className="form-control "
+                        id="floatingInput"
+                        placeholder="To"
+                        onChange={(e)=>setmaxPrice(e.target.value)}
+                      />
+                      <label htmlfor="floatingInput1">To</label>
+                    </div>
                   </div>
                 </div>
-                <h5 className="sub-title">Price</h5>
-                <div className="d-flex align-items-center gap-10  ">
-                  <div className="form-floating ">
-                    <input
-                      type="email"
-                      className="form-control "
-                      id="floatingInput"
-                      placeholder="name@example.com"
-                    />
-                    <label htmlfor="floatingInput">From</label>
-                  </div>
-                  <div className="form-floating  ">
-                    <input
-                      type="email"
-                      className="form-control "
-                      id="floatingInput"
-                      placeholder="To"
-                    />
-                    <label htmlfor="floatingInput1">To</label>
-                  </div>
-                </div>
-                <h5 className="sub-title">Colors</h5>
-
+              
+              <div className="mt-4 mb-3">
+                <h3 className="sub-title">Product Tags</h3>
                 <div>
-                  <Color />
-                </div>
-
-                <h5 className="sub-title">Size</h5>
-                <div>
-                  <div className="form-check">
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      name=""
-                      id="color-1"
-                    />
-                    <label className="form-check-label" htmlFor="">
-                      S (2)
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      name=""
-                      id="color-2"
-                    />
-                    <label className="form-check-label" htmlFor="">
-                      M (2)
-                    </label>
+                  <div className="product-tags d-flex flex-wrap align-items-center gap-10">
+                    {tags &&
+                      [...new Set(tags)].map((item, index) => {
+                        return (
+                          <span
+                            onClick={() => setTag(item)}
+                            key={index}
+                            className="text-capitalize badge bg-light text-secondary rounded-3 py-2 px-3"
+                          >
+                            {item}
+                          </span>
+                        );
+                      })}
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="filter-card mb-3">
-              <h3 className="filter-title">Product Tags</h3>
+              <h3 className="sub-title">Product Brands</h3>
               <div>
                 <div className="product-tags d-flex flex-wrap align-items-center gap-10">
-                  <span className="badge bg-light text-secondary rounded-3 py-2 px-3">
-                    Headphone
-                  </span>
-                  <span className="badge bg-light text-secondary rounded-3 py-2 px-3">
-                    Laptop
-                  </span>
-                  <span className="badge bg-light text-secondary rounded-3 py-2 px-3">
-                    Mobile
-                  </span>
-                  <span className="badge bg-light text-secondary rounded-3 py-2 px-3">
-                    Vivo
-                  </span>
-                  <span className="badge bg-light text-secondary rounded-3 py-2 px-3">
-                    Wire
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="filter-card mb-3">
-              <h3 className="filter-title">Random Product</h3>
-              <div>
-                <div className="random-products d-flex mb-3">
-                  <div className="w-50">
-                    <img
-                      src="images/watch.jpg"
-                      alt="watch"
-                      className="img-fluid"
-                    />
-                  </div>
-                  <div className="w-50">
-                    <h5>
-                      Kids Headphone Bulk 10 pack Multi colored for students
-                    </h5>
-                    <ReactStars
-                      edit={false}
-                      count={5}
-                      value={4}
-                      size={24}
-                      isHalf={true}
-                      emptyIcon={<i className="far fa-star"></i>}
-                      halfIcon={<i className="fa fa-star-half-alt"></i>}
-                      fullIcon={<i className="fa fa-star"></i>}
-                      activeColor="#ffd700"
-                    />
-
-                    <b>$ 300</b>
-                  </div>
-                </div>
-
-                <div className="random-products d-flex mb-3">
-                  <div className="w-50">
-                    <img
-                      src="images/watch.jpg"
-                      alt="watch"
-                      className="img-fluid"
-                    />
-                  </div>
-                  <div className="w-50">
-                    <h5>
-                      Kids Headphone Bulk 10 pack Multi colored for students
-                    </h5>
-
-                    <ReactStars
-                      edit={false}
-                      count={5}
-                      value={4}
-                      size={24}
-                      isHalf={true}
-                      emptyIcon={<i className="far fa-star"></i>}
-                      halfIcon={<i className="fa fa-star-half-alt"></i>}
-                      fullIcon={<i className="fa fa-star"></i>}
-                      activeColor="#ffd700"
-                    />
-
-                    <b>$ 300</b>
-                  </div>
+                  {brands &&
+                    [...new Set(brands)].map((item, index) => {
+                      return (
+                        <span
+                          onClick={() => setBrand(item)}
+                          key={index}
+                          className="text-capitalize badge bg-light text-secondary rounded-3 py-2 px-3"
+                        >
+                          {item}
+                        </span>
+                      );
+                    })}
                 </div>
               </div>
             </div>
