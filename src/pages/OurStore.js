@@ -11,17 +11,20 @@ import { getAllProducts } from "../features/products/productSlice";
 const OurStore = () => {
   const [grid, setGrid] = useState(4);
   const productState = useSelector((state) => state?.product?.product);
-  const [brands, setBrands] = useState(null);
-  const [categories, setCategories] = useState(null);
-  const [tags, setTags] = useState(null);
-  const [minPrice, setminPrice] = useState(null);
-  const [maxPrice, setmaxPrice] = useState(null);
+  const [brands, setBrands] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [tags, setTags] = useState([]);
+ 
 
   // Filter State
-  const [tag, setTag] = useState([]);
-  const [category, setCategory] = useState([]);
-  const [brand, setBrand] = useState([]);
+  const [tag, setTag] = useState(null);
+  const [category, setCategory] = useState(null);
+  const [brand, setBrand] = useState(null);
+  const [minPrice, setminPrice] = useState(null);
+  const [maxPrice, setmaxPrice] = useState(null);
+  const [sort, SetSort] = useState(null);
 
+  console.log(sort)
   useEffect(() => {
     let newBrands = [];
     let category = [];
@@ -39,13 +42,14 @@ const OurStore = () => {
     setTags(newtags);
   }, [productState]);
 
-  console.log(brands);
   const dispatch = useDispatch();
   useEffect(() => {
     getProducts();
-  }, []);
+  }, [sort,tag,brand,category,minPrice,maxPrice]);
   const getProducts = () => {
-    dispatch(getAllProducts());
+    dispatch(
+      getAllProducts({sort,tag,brand,category,minPrice,maxPrice})
+    );
   };
 
   return (
@@ -76,34 +80,33 @@ const OurStore = () => {
             </div>
 
             <div className="filter-card mb-3">
-              
-                <h3 className="filter-title">Filter By</h3>
-                <div>
-                  <h5 className="sub-title">Price</h5>
-                  <div className="d-flex align-items-center gap-10  ">
-                    <div className="form-floating ">
-                      <input
-                        type="number"
-                        className="form-control "
-                        id="floatingInput"
-                        placeholder="name@example.com"
-                        onChange={(e)=>setminPrice(e.target.value)}
-                      />
-                      <label htmlfor="floatingInput">From</label>
-                    </div>
-                    <div className="form-floating  ">
-                      <input
-                        type="number"
-                        className="form-control "
-                        id="floatingInput"
-                        placeholder="To"
-                        onChange={(e)=>setmaxPrice(e.target.value)}
-                      />
-                      <label htmlfor="floatingInput1">To</label>
-                    </div>
+              <h3 className="filter-title">Filter By</h3>
+              <div>
+                <h5 className="sub-title">Price</h5>
+                <div className="d-flex align-items-center gap-10  ">
+                  <div className="form-floating ">
+                    <input
+                      type="number"
+                      className="form-control "
+                      id="floatingInput"
+                      placeholder="name@example.com"
+                      onChange={(e) => setminPrice(e.target.value)}
+                    />
+                    <label htmlfor="floatingInput">From</label>
+                  </div>
+                  <div className="form-floating  ">
+                    <input
+                      type="number"
+                      className="form-control "
+                      id="floatingInput"
+                      placeholder="To"
+                      onChange={(e) => setmaxPrice(e.target.value)}
+                    />
+                    <label htmlfor="floatingInput1">To</label>
                   </div>
                 </div>
-              
+              </div>
+
               <div className="mt-4 mb-3">
                 <h3 className="sub-title">Product Tags</h3>
                 <div>
@@ -152,17 +155,14 @@ const OurStore = () => {
                     defaultValue={"manula"}
                     className="form-control form-select"
                     id=""
+                    onChange={(e) => SetSort(e.target.value)}
                   >
-                    <option value="manual">Featured</option>
-                    <option value="best-selling">Best selling</option>
-                    <option value="title-ascending">Alphabetically, A-Z</option>
-                    <option value="title-descending">
-                      Alphabetically, Z-A
-                    </option>
-                    <option value="price-ascending">Price, low to high</option>
-                    <option value="price-descending">Price, high to low</option>
-                    <option value="created-ascending">Date, old to new</option>
-                    <option value="created-descending">Date, new to old</option>
+                    <option value="title">Alphabetically, A-Z</option>
+                    <option value="-title">Alphabetically, Z-A</option>
+                    <option value="price">Price, low to high</option>
+                    <option value="-price">Price, high to low</option>
+                    <option value="createdAt">Date, old to new</option>
+                    <option value="-createdAt">Date, new to old</option>
                   </select>
                 </div>
                 <div className="d-flex align-items-center gap-10">
