@@ -89,6 +89,13 @@ const resetPass=async(data)=>{
     }
 }
 
+const emptyCart=async()=>{
+    const responce=await axios.delete(`${base_url}user/empty-cart`,config)
+    if(responce.data){
+        return responce.data
+    }
+}
+
 
 export const authService={
     register,
@@ -102,5 +109,6 @@ export const authService={
     getUserOrders,
     updateUser,
     forgotPassToken,
-    resetPass
+    resetPass,
+    emptyCart
 }

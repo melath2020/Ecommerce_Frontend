@@ -85,7 +85,7 @@ const Cart = () => {
                     min={1}
                     max={10}
                     id=""
-                    value={ProductUpdateDetail?.quantity ? ProductUpdateDetail?.quantity:item?.quantity}
+                    value={item?.quantity}
                     onChange={(e)=>setProductUpdateDetail({cartItemId:item?._id,quantity:e.target.value})}
                   />
                 </div>

@@ -42,6 +42,14 @@ export const getUserCart=createAsyncThunk("user/cart/get",async (thunkAPI)=>{
     }
 })
 
+export const deleteUserCart=createAsyncThunk("user/cart/delete",async (thunkAPI)=>{
+    try{
+        return await authService.emptyCart()
+    }catch(errors){
+        return thunkAPI.rejectWithValue(errors)
+    }
+})
+
 export const deleteCartProduct=createAsyncThunk("user/cart/products/delete",async (id,thunkAPI)=>{
     try{
         return await authService.removeProductFromCart(id)
@@ -115,9 +123,7 @@ export const authSlice=createSlice({
     extraReducers:(builder)=>{
         builder.addCase(registerUser.pending,(state)=>{
             state.isLoading=true;
-            if(state.isError===true){
-                toast.error("Something Went wrong")
-            }
+
         }).addCase(registerUser.fulfilled,(state,action)=>{
             state.isLoading=false;
             state.isError=false;
@@ -132,13 +138,11 @@ export const authSlice=createSlice({
             state.isSuccess=false;
             state.message=action.error;
             if(state.isError===true){
-                toast.error(action.error)
+                toast.error(action.payload.response.data.message)
             }
         }).addCase(loginUser.pending,(state)=>{
             state.isLoading=true;
-            if(state.isError===true){
-                toast.error("Something Went wrong")
-            }
+         
         }).addCase(loginUser.fulfilled,(state,action)=>{
             state.isLoading=false;
             state.isError=false;
@@ -154,7 +158,7 @@ export const authSlice=createSlice({
             state.isSuccess=false;
             state.message=action.error;
             if(state.isError===true){
-                toast.error(action.error)
+                toast.error(action.payload.response.data.message)
             }
         }).addCase(getUserProductWishlist.pending,(state)=>{
             state.isLoading=true;
@@ -344,6 +348,23 @@ export const authSlice=createSlice({
             if(state.isError){
                 toast.error("Something Went Wrong!")
             }
+        }).addCase(deleteUserCart.pending,(state)=>{
+            state.isLoading=true;
+           
+        }).addCase(deleteUserCart.fulfilled,(state,action)=>{
+            state.isLoading=false;
+            state.isError=false;
+            state.isSuccess=true;
+            state.deletedCart=action.payload;
+           
+           
+           
+        }).addCase(deleteUserCart.rejected,(state,action)=>{
+            state.isLoading=false;
+            state.isError=true;
+            state.isSuccess=false;
+            state.message=action.error;
+           
         })
     }
 })
