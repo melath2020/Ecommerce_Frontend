@@ -81,7 +81,7 @@ const Checkout = () => {
       alert("Razorpay SDK failed to load")
       return;
     }
-    const result=await axios.post("http://localhost:5000/api/user/order/checkout",{amount:totalAmount+5},config)
+    const result=await axios.post("https://restapi-ecomm-new.onrender.com/api/user/order/checkout",{amount:totalAmount+5},config)
     if(!result){
       alert("Something went wrong")
       return;
@@ -103,7 +103,7 @@ const Checkout = () => {
                     // razorpaySignature: response.razorpay_signature,
                 };
 
-                const result = await axios.post("http://localhost:5000/api/user/order/paymentVerification", data,config);
+                const result = await axios.post("https://restapi-ecomm-new.onrender.com/api/user/order/paymentVerification", data,config);
 
               
                 dispatch(createAnOrder({totalPrice:totalAmount,totalPriceAfterDiscount:totalAmount,orderItems:cartProductsState,paymentInfo:result.data,shippingInfo:JSON.parse(localStorage.getItem("address"))}))
