@@ -25,18 +25,19 @@ const ProductCard = (props) => {
         <>
 {
     data?.map((item,index)=>{
+        
         return(
             <div key={index} className={` ${location.pathname == "/product" ? `gr-${grid}` : "col-3"
         } `}>
         <div
    
-    className="product-card position-relative">
+    className="product-card position-relative mt-2">
             <div className="wishlist-icon position-absolute">
                 <button className="border-0 bg-transparent" onClick={(e)=>{addToWish(item?._id)}}><img src={wish} alt="wishlist" /></button>
             </div>
             <div className="product-image">
 
-                <img src={item?.images[0]?.url} className='img-fluid w-100' alt="product-image" srcset="" />
+                <img src={item?.images[0]?.url ? item.images[0].url:watch} className='img-fluid w-100' alt="product-image" srcset="" />
                 <img src={watch2} className='img-fluid' alt="product-image" srcset="" />
             </div>
             <div className="product-details">

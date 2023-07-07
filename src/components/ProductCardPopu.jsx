@@ -31,7 +31,7 @@ const ProductCardPopu = (props) => {
   } = props;
   return (
     <div key={index} className="col-3">
-      <div className="product-card position-relative">
+      <div className="product-card position-relative mt-2">
         <div className="wishlist-icon position-absolute">
           <button
             className="border-0 bg-transparent"
@@ -44,7 +44,7 @@ const ProductCardPopu = (props) => {
         </div>
         <div className="product-image">
           <img
-            src={images[0]?.url}
+            src={images[0]?.url? images[0].url:watch2}
             className="img-fluid w-100"
             alt="product-image"
             srcset=""
