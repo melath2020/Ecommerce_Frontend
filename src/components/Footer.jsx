@@ -39,10 +39,10 @@ const Footer = () => {
 
             <a href="mailto:aswinsudhakaran98@gmail.com " className="mt-4 d-block mb-0 text-white">aswinsudhakaran98@gmail.com</a>
           <div className="soacial_icons d-flex align-items-center gap-30 mt-4">
-            <a href='#' ><BsLinkedin className='text-white fs-4'/></a>
-            <a href='#' ><BsInstagram className='text-white fs-4'/></a>
-            <a href='#'><BsGithub className='text-white fs-4'/></a>
-            <a href='#'><BsYoutube className='text-white fs-4'/></a>
+            <a href='#a' ><BsLinkedin className='text-white fs-4'/></a>
+            <a href='#a' ><BsInstagram className='text-white fs-4'/></a>
+            <a href='#a'><BsGithub className='text-white fs-4'/></a>
+            <a href='#a'><BsYoutube className='text-white fs-4'/></a>
           </div>
           </div>
         </div>
